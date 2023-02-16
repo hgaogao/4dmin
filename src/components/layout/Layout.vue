@@ -1,11 +1,4 @@
 <script lang="ts" setup>
-import { ref, watch } from 'vue'
-import { useThrottleFn, useWindowSize } from '@vueuse/core'
-import NSDrawer from '../NSDrawer.vue'
-import MainContainer from './MainContainer.vue'
-import SideBar from './sideBar/SideBar.vue'
-import TopHeader from './TopHeader.vue'
-import { useGlobalSettingStore } from '@/stores/modules/globalSettings'
 const { width } = useWindowSize()
 const globalSettingStore = useGlobalSettingStore()
 watch(
@@ -24,7 +17,6 @@ watch(
 <script lang="ts">
 export default {
   name: 'Layout',
-  components: { SideBar, TopHeader, MainContainer, NSDrawer },
 }
 </script>
 

@@ -13,8 +13,25 @@ export default defineConfig({
     Unocss(),
     AutoImport({
       resolvers: [ElementPlusResolver()],
+      imports: [
+        'vue',
+        'vue-router',
+        '@vueuse/head',
+        '@vueuse/core',
+      ],
+      dts: './types/auto-imports.d.ts',
+      dirs: [
+        'src/composables/**',
+        'src/stores/**',
+      ],
+      vueTemplate: true,
     }),
     Components({
+      // allow auto load markdown components under `./src/components/`
+      extensions: ['vue'],
+      // filters for transforming targets
+      include: [/\.vue$/, /\.vue\?vue/],
+      dts: './types/components.d.ts',
       resolvers: [ElementPlusResolver()],
     })],
   resolve: {

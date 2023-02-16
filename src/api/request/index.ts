@@ -12,16 +12,17 @@ class Request {
   // 请求方法
   request<T>(config: RequestConfig): Promise<T> {
     return new Promise((resolve, reject) => {
-    // 请求的拦截器
+    // 接口层请求的拦截器
       if (config.interceptor?.requestInterceptor)
         config = config.interceptor.requestInterceptor(config)
 
-      this.axiosInstance.request(config).then((res) => {
-      // 响应的拦截器
+      this.axiosInstance.request<T>(config).then((res) => {
+      // 接口层的响应的拦截器
         if (config.interceptor?.responseInterceptor)
           res = config.interceptor.responseInterceptor(res)
         // 这里的res类型推导为AxiosResponse<T>，但是在上面的拦截器中，我们已经将res.data返回了，所以这里的res类型应该是T
-        resolve(res as unknown as T)
+        // 最后一层拦截
+        resolve(res.data)
       }).catch((err) => {
         reject(err)
       })
@@ -51,7 +52,7 @@ class Request {
     this.axiosInstance.interceptors.response.use(
       (res) => {
         // console.log('全局响应拦截器')
-        return res.data
+        return res
       },
     )
 

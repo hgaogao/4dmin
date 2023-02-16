@@ -1,25 +1,29 @@
-import Request from '@/api/index'
+import Request from '@/api/baseRequest'
 
 enum testApi {
-  test = '/pet/1',
+  test = '/pet/',
 }
-const test = Request.request<any>({
-  method: 'get',
-  url: testApi.test,
-  interceptor: {
-    requestInterceptor: (config) => {
-      return config
-    },
-    responseInterceptor: (response) => {
-      return response
-    },
-  },
-}).then((result) => {
-  console.log('example', result.code)
-  console.log('example', result.data.id)
-  console.log('example', result.data.name)
-}).catch((err) => {
-  console.log('example', err)
-})
 
+const controller = new AbortController()
+const test = () => {
+  return Request.request<{ code: number; data: object } >({
+    method: 'get',
+    url: testApi.test + 1,
+    signal: controller.signal,
+    headers: {
+      'X-Custom-Header': 'okok',
+    },
+    interceptor: {
+      requestInterceptor: (config) => {
+        return config
+      },
+      responseInterceptor: (response) => {
+        return response
+      },
+    },
+  })
+}
+setTimeout(() => {
+  controller.abort()
+}, 1500)
 export { test }
